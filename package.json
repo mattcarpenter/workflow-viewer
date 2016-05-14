@@ -1,0 +1,19 @@
+{
+  "name": "workflow-viewer",
+  "version": "0.0.1",
+  "description": "A web-based visualization tool for the Workflows JavaScript library developed by Disney Technology Solutions & Services",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattcarpenter/workflow-viewer.git"
+  },
+  "author": "Matt Carpenter",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mattcarpenter/workflow-viewer/issues"
+  },
+  "homepage": "https://github.com/mattcarpenter/workflow-viewer#readme"
+}
