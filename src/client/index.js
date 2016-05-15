@@ -1,6 +1,6 @@
 var Workflow = require('../lib/workflow');
 var w = new Workflow(require('./sample.js').login);
-
+console.log(w.getGraph());
 /**
  *  Notes:
  * to->from edges should not ever go backwards unless it's a loop

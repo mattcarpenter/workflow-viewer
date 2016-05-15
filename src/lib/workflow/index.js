@@ -4,7 +4,7 @@
     module.exports = function Workflow(def) {
         var definition = def;
 
-        buildGraph(definition);
+        var root = buildGraph(definition);
 
         return {
             getGraph: getGraph
@@ -15,7 +15,7 @@
          * @returns {object} graph
          */
         function getGraph() {
-            return {};
+            return root;
         }
     };
 
@@ -52,7 +52,7 @@
             return result;
         }
 
-        console.log(root);
+        return root;
     }
 
     /**
