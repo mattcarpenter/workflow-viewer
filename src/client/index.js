@@ -1,6 +1,12 @@
 var Workflow = require('../lib/workflow');
 var w = new Workflow(require('./sample.js').login);
 
+/**
+ *  Notes:
+ * to->from edges should not ever go backwards unless it's a loop
+ * todo: figure out how to detect loops
+ */
+
 var graph = new joint.dia.Graph();
 
 var paper = new joint.dia.Paper({

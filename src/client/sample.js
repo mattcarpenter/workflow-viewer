@@ -141,6 +141,10 @@ module.exports = {
           {
             "condition": "errors.isServiceError",
             "value": "service-error"
+          },
+          {
+            "condition": "errors.other",
+            "value": "prompt"
           }
         ]
       },
