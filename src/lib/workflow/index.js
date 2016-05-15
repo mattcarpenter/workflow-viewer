@@ -78,6 +78,10 @@
                 });
         });
 
+        if (isRoot) {
+            definition[currentStepName].name = currentStepName;
+        }
+
         return isRoot ? definition[currentStepName] : findRootStepName(definition, parent);
     }
 
