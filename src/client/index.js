@@ -1,3 +1,6 @@
+var Workflow = require('../lib/workflow');
+var w = new Workflow(require('./sample.js').login);
+
 var graph = new joint.dia.Graph();
 
 var paper = new joint.dia.Paper({

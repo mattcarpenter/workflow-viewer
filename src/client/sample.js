@@ -1,5 +1,4 @@
-
-{
+module.exports = {
   "login": {
     "analytics-pageview": {
       "callbacks": {
@@ -1305,4 +1304,4 @@
       "subflows": []
     }
   }
-}
+};
