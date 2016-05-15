@@ -24,9 +24,8 @@
      * @param {object} definition Workflow definition object
      */
     function buildGraph(definition) {
-        debugger;
-        var rootStepName = findRootStepName(definition, 'prompt');
-        debugger;
+        var rootStepName = findRootStepName(definition, 'service-error');
+        console.log('root step name:', rootStepName);
     }
 
     /**
@@ -47,16 +46,12 @@
         var isRoot = stepKeys.every(function (enumeratedStepName) {
             var callbacks = definition[enumeratedStepName].callbacks;
             var outSteps = (callbacks.success || []).concat(callbacks.failure || []).concat(callbacks.cancel || []);
-            var foundLinks = false;
-            var matches = outSteps
+            return outSteps
                 .map((s) => s.value)
                 .every(function (outStepName) {
                     parent = (!definition[enumeratedStepName].$seen ? enumeratedStepName : parent);
                     return !(outStepName === currentStepName && !definition[enumeratedStepName].$seen);
                 });
-
-            console.log(matches);
-            return matches;
         });
 
         return isRoot ? definition[currentStepName] : findRootStepName(definition, parent);
