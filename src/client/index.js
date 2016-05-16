@@ -9,7 +9,7 @@
 
     var paper = new joint.dia.Paper({
         el: $('#paper'),
-        width: $(window).width(),
+        width: $(window).width() + 600,
         height: $(window).height(),
         gridSize: 1,
         model: graph,
@@ -56,16 +56,26 @@
 
             // process each child step
             (node.out || []).forEach((sub) => {
+                var canLog = false;
+                if (sub.name==='create-session') {
+
+                    canLog =true;
+                    console.log('hoping to add ' + sub.name + '..................');
+                    console.log('parent:', node.name);
+                }
                 // can ANOTHER sibling reach the node I'm about to add?
-                (node.out || [])
+                // Bounce it out one column if another sibling can reach the node I'm about to add.
+                var canReach = (node.out || [])
                     .filter((n) => n.name !== sub.name)
-                    .forEach((sibling) => {
-                        if (sibling.name === 'parse-errors')
-                            console.log('can ' + sibling.name + ' reach ' + sub.name + '?', canReachNode(sibling, sub));
+                    .some((sibling) => {
+                        if (canLog)
+                            console.log('can ' + sibling.name + ' go to it?' + canReachNode(sibling, sub));
+                        return canReachNode(sibling, sub);
                     });
 
+
                 // only those who we've not already added to the graph
-                if (stepsSeen.indexOf(sub.name) === -1) {
+                if (stepsSeen.indexOf(sub.name) === -1 ) {
                     walkAndAdd(sub);
                 }
             });
