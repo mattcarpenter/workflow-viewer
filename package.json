@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/mattcarpenter/workflow-viewer#readme",
   "dependencies": {
+    "color-scheme": "0.0.5",
     "gulp": "^3.9.1",
+    "gulp-rename": "^1.2.2",
     "hapi": "^13.4.0",
     "inert": "^4.0.0",
     "jade": "^1.11.0",

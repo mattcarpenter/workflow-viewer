@@ -1,0 +1,28 @@
+.connection-wrap {
+	stroke: #000;
+	opacity: 1;
+	stroke-width: 7;
+	opacity: 0.1;
+}
+
+.connection-wrap:hover {
+	opacity: 1 !important;
+	stroke: #A1D490;
+	stroke-opacity: 1;
+}
+
+g:hover > .connection-wrap {
+	stroke: #A1D490;
+	stroke-width: 9;
+	opacity: 1;
+}
+
+.marker-arrowhead {
+	fill: #A1D490;
+	stroke: #000;
+	stroke-width: 1;
+}
+
+.link-tools {
+	display: none;
+}

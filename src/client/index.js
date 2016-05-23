@@ -2,10 +2,22 @@
     'use strict';
 
     var Workflow = require('../lib/workflow');
-
-    var workflowDefinition = require('./sample.js').login;
+    var ColorScheme = require('color-scheme');
+    var workflowDefinition = require('./sample.js')['login'];
     var workflowGraph = new Workflow(workflowDefinition);
+    require('../lib/link');
     var graph = new joint.dia.Graph();
+
+    var scheme = new ColorScheme();
+
+    scheme.from_hue(20)     // Start the scheme  
+        .scheme('analogic')   // Use the 'triade' scheme, that is, colors 
+                            // selected from 3 points equidistant around 
+                            // the color wheel. 
+        .variation('pastel'); // Use the 'soft' color variation 
+
+    var colors = scheme
+            .colors();
 
     var paper = new joint.dia.Paper({
         el: $('#paper'),
@@ -148,7 +160,8 @@
             if (current) {
                 (current.out || []).forEach((dest) => {
                     console.log('linking ' + current.name + ' to ' + dest.name);
-                    var cell = new joint.shapes.org.Arrow({
+                    var color = '#' + colors[Math.floor(Math.random() * colors.length)];
+                    var cell = new joint.shapes.org.Arrow2({
                         source: {id: current.rect.id, port: dest.name },
                         target: {id: dest.rect.id, port: 'in' },
                         router: { name: 'metro' },
@@ -157,11 +170,12 @@
                             '.connection': {
                                 'fill': 'none',
                                 'stroke-linejoin': 'round',
-                                'stroke-width': '1',
-                                'stroke': 'rgb(126,230,230)'//'#999'
+                                'stroke-width': '2',
+                                //'stroke': 'rgb(126,230,230)'//'#999'
+                                'stroke': color
                             },
                             '.marker-target': {
-                                fill: '#999',
+                                fill: color,
                                 'stroke-width': 0,
                                 d: 'M 10 0 L 0 5 L 10 10 z'
                             }
