@@ -21,6 +21,7 @@ g:hover > .connection-wrap {
 	fill: #A1D490;
 	stroke: #000;
 	stroke-width: 1;
+	display: none;
 }
 
 .link-tools {

@@ -1,33 +1,44 @@
 (function () {
-    'use strict';
+   'use strict';
 
-    var Workflow = require('../lib/workflow');
+    var Workflow = require('./lib/workflow');
     var ColorScheme = require('color-scheme');
-    var workflowDefinition = require('./sample.js')['login'];
+    var workflowDefinition = require('./sample.js')['register-subflow'];
     var workflowGraph = new Workflow(workflowDefinition);
-    require('../lib/link');
+    require('./lib/link');
+    require('./lib/model');
     var graph = new joint.dia.Graph();
 
     var scheme = new ColorScheme();
 
-    scheme.from_hue(20)     // Start the scheme  
-        .scheme('analogic')   // Use the 'triade' scheme, that is, colors 
-                            // selected from 3 points equidistant around 
-                            // the color wheel. 
-        .variation('pastel'); // Use the 'soft' color variation 
+    scheme.from_hue(20) 
+        .scheme('analogic')
+        .variation('pastel');
 
     var colors = scheme
-            .colors();
+        .colors();
 
     var paper = new joint.dia.Paper({
-        el: $('#paper'),
-        width: $(window).width() + 600,
-        height: $(window).height(),
+        width: 5000,
+        height: 5000,
         gridSize: 1,
         model: graph,
         perpendicularLinks: true,
-        restrictTranslate: true
     });
+
+    var paperScroller = new joint.ui.PaperScroller({
+        paper: paper,
+        autoResizePaper: true
+    });
+
+    paperScroller.$el.css({
+        width: $(window).width(),
+        height: $(window).height()
+    });
+
+    $('#paper').append(paperScroller.render().el);
+
+    paper.on('blank:pointerdown', paperScroller.startPanning);
 
     (function () {
         var stepsSeen = [];
@@ -39,27 +50,7 @@
         walkAndAdd(workflowGraph.getGraph(), 0);
 
         function walkAndAdd(node, col) {
-            // add this to the graph
-            /*var rect = new joint.shapes.basic.Rect({
-                position: { x: xOffset, y: yOffset },
-                size: { width: 150, height: 50 },
-                inPorts: ['in1', 'in2'],
-                attrs: {
-                    rect: {
-                        stroke: '#444',
-                        'stroke-width': 2
-                    },
-                    text: {
-                        text: node.name,
-                        fill: '#000',
-                        'font-size': 12
-                    },
-                    '.inPorts circle': { fill: '#16A085' },
-                    '.outPorts circle': { fill: '#E74C3C' }
-                }
-            });*/
-
-            var rect = new joint.shapes.devs.Model({
+            var rect = new joint.shapes.devs.Model2({ 
                 position: { x: xOffset, y: yOffset },
                 size: { width: 150, height: 50 + (node.out.length * 20) },
                 inPorts: ['in'],
@@ -158,9 +149,13 @@
             var current = findStepInGraph(workflowGraph.getGraph(), stepName);
             console.log('found ' + stepName + '?', current);
             if (current) {
+                var currentPortNumber = 0;
                 (current.out || []).forEach((dest) => {
                     console.log('linking ' + current.name + ' to ' + dest.name);
                     var color = '#' + colors[Math.floor(Math.random() * colors.length)];
+                    debugger;
+                    current.rect.attr('.outPorts>.port' + currentPortNumber +'>.port-body/fill', color);
+                    dest.rect.attr('.outPorts>.port0>.port-body/fill', '#000000');
                     var cell = new joint.shapes.org.Arrow2({
                         source: {id: current.rect.id, port: dest.name },
                         target: {id: dest.rect.id, port: 'in' },
@@ -183,6 +178,7 @@
 
                     });
                     graph.addCell(cell);
+                    currentPortNumber++;
                 });
             }
         });
@@ -226,60 +222,4 @@
             return found;
         }
     }
-
-
-    /*
-    var member = function (x, y, rank, name, image, background, textColor) {
-
-        textColor = textColor || "#000";
-
-        var cell = new joint.shapes.org.Member({
-            position: {x: x, y: y},
-            attrs: {
-                '.card': {fill: background, stroke: 'none'},
-                image: {'xlink:href': '/images/demos/orgchart/' + image, opacity: 0.7},
-                '.rank': {text: rank, fill: textColor, 'word-spacing': '-5px', 'letter-spacing': 0},
-                '.name': {text: name, fill: textColor, 'font-size': 13, 'font-family': 'Arial', 'letter-spacing': 0}
-            }
-        });
-        graph.addCell(cell);
-        return cell;
-    };
-
-    function link(source, target, breakpoints) {
-
-        var cell = new joint.shapes.org.Arrow({
-            source: {id: source.id},
-            target: {id: target.id},
-            vertices: breakpoints,
-            attrs: {
-                '.connection': {
-                    'fill': 'none',
-                    'stroke-linejoin': 'round',
-                    'stroke-width': '2',
-                    'stroke': '#4b4a67'
-                }
-            }
-
-        });
-        graph.addCell(cell);
-        return cell;
-    }
-
-    var bart = member(300, 70, 'CEO', 'Bart Simpson', 'male.png', '#30d0c6');
-    var homer = member(90, 200, 'VP Marketing', 'Homer Simpson', 'male.png', '#7c68fd', '#f1f1f1');
-    var marge = member(300, 200, 'VP Sales', 'Marge Simpson', 'female.png', '#7c68fd', '#f1f1f1');
-    var lisa = member(500, 200, 'VP Production', 'Lisa Simpson', 'female.png', '#7c68fd', '#f1f1f1');
-    var maggie = member(400, 350, 'Manager', 'Maggie Simpson', 'female.png', '#feb563');
-    var lenny = member(190, 350, 'Manager', 'Lenny Leonard', 'male.png', '#feb563');
-    var carl = member(190, 500, 'Manager', 'Carl Carlson', 'male.png', '#feb563');
-
-
-    link(bart, marge, [{x: 385, y: 180}]);
-    link(bart, homer, [{x: 385, y: 180}, {x: 175, y: 180}]);
-    link(bart, lisa, [{x: 385, y: 180}, {x: 585, y: 180}]);
-    link(homer, lenny, [{x: 175, y: 380}]);
-    link(homer, carl, [{x: 175, y: 530}]);
-    link(marge, maggie, [{x: 385, y: 380}]);
-    */
 })();
