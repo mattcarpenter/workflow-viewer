@@ -5,10 +5,12 @@
     var ColorScheme = require('color-scheme');
     var workflowDefinition = require('./sample.js')['register-subflow'];
     var workflowGraph = new Workflow(workflowDefinition);
+    var Color = require('color');
+    
     require('./lib/link');
     require('./lib/model');
-    var graph = new joint.dia.Graph();
 
+    var graph = new joint.dia.Graph();
     var scheme = new ColorScheme();
 
     scheme.from_hue(20) 
@@ -25,6 +27,8 @@
         model: graph,
         perpendicularLinks: true,
     });
+
+    setGrid(paper, 10, '#484a54');
 
     var paperScroller = new joint.ui.PaperScroller({
         paper: paper,
@@ -52,34 +56,34 @@
         function walkAndAdd(node, col) {
             var rect = new joint.shapes.devs.Model2({ 
                 position: { x: xOffset, y: yOffset },
-                size: { width: 150, height: 50 + (node.out.length * 20) },
+                size: { width: 200, height: 50 + (node.out.length * 20) },
                 inPorts: ['in'],
                 outPorts: node.out.map((n) => n.name),
                 attrs: {
                     '.label': {
                         text: node.name,
                         //'ref-x': .4,
-                        'ref-y': -13,
                         'font-family': 'arial, helvetica, sans-serif',
                         'font-size': 12,
-                        'fill': '#FFFFFF'
+                        'fill': '#555'
                     },
-                    rect: {
-                        fill: '#F6F6F7',
-                        stroke: '#555'
+                    '.body': {
+                        rect: {
+                            fill: '#EAEAEA',
+                            stroke: '#222'
+                        }
                     },
                     '.inPorts circle': { fill: 'rgb(230,178,126)', 'stroke-width': 0 },
                     '.outPorts circle': { fill: 'rgb(178,126,230)', 'stroke-width': 0 },
                     '.inPorts .port-label': {
                         'font-family': 'arial, helvetica, sans-serif',
                         'font-size': 10,
-                        x: 25,
-                        fill: '#555'
+                        fill: '#555',
+                        opacity: 0
                     },
                     '.outPorts .port-label': {
                         'font-family': 'arial, helvetica, sans-serif',
                         'font-size': 10,
-                        x: -100,
                         fill: '#555'
                     }
                 }
@@ -134,13 +138,13 @@
 
         // add everything to the graph
         for (var col = 0; col < columns.length; col++ ){
-            var currentY = 20;
+            var currentY = 40;
             for (var row = 0; row < columns[col].length; row++) {
                 var rect = columns[col][row];
-                rect.attributes.position = { x: 100 + (col * 400), y: currentY };
+                rect.attributes.position = { x: 100 + (col * 430), y: currentY };
                 console.log('adding rect', rect);
                 graph.addCells([rect]);
-                currentY += rect.attributes.size.height + 35;
+                currentY += rect.attributes.size.height + 60;
             }
         }
 
@@ -154,8 +158,13 @@
                     console.log('linking ' + current.name + ' to ' + dest.name);
                     var color = '#' + colors[Math.floor(Math.random() * colors.length)];
                     debugger;
-                    current.rect.attr('.outPorts>.port' + currentPortNumber +'>.port-body/fill', color);
-                    dest.rect.attr('.outPorts>.port0>.port-body/fill', '#000000');
+                    current.rect.attr('.outPorts>.port' + currentPortNumber +'>.port-body/fill', Color(color).lighten(0.3).hexString());
+                    current.rect.attr('.outPorts>.port' + currentPortNumber + '>.port-body/stroke', Color(color).lighten(0).hexString());
+                    dest.rect.attr('.inPorts>.port0>.port-body/fill', Color(color).lighten(0.3).hexString());
+                    dest.rect.attr('.inPorts>.port0>.port-body/stroke', Color(color).lighten(0).hexString());
+                    //dest.rect.attr('.inPorts>.port0>.port-body/fill', '#E7E7E7');
+                    //dest.rect.attr('.inPorts>.port0>.port-body/stroke', '#B0B0B0');
+
                     var cell = new joint.shapes.org.Arrow2({
                         source: {id: current.rect.id, port: dest.name },
                         target: {id: dest.rect.id, port: 'in' },
@@ -182,6 +191,8 @@
                 });
             }
         });
+        paperScroller.centerContent();
+        paperScroller.zoomToFit();
     })();
 
     /**
@@ -221,5 +232,22 @@
 
             return found;
         }
+    }
+
+    function setGrid(paper, gridSize, color) {
+        // Set grid size on the JointJS paper object (joint.dia.Paper instance)
+        paper.options.gridSize = gridSize;
+        // Draw a grid into the HTML 5 canvas and convert it to a data URI image
+        var canvas = $('<canvas/>', { width: gridSize, height: gridSize });
+        canvas[0].width = gridSize;
+        canvas[0].height = gridSize;
+        var context = canvas[0].getContext('2d');
+        context.beginPath();
+        context.rect(1, 1, 1, 1);
+        context.fillStyle = color || '#AAAAAA';
+        context.fill();
+        // Finally, set the grid background image of the paper container element.
+        var gridBackgroundImage = canvas[0].toDataURL('image/png');
+        paper.$el.css('background-image', 'url("' + gridBackgroundImage + '")');
     }
 })();

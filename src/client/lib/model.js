@@ -1,5 +1,6 @@
 joint.shapes.devs.Model2 = joint.shapes.basic.Generic.extend(_.extend({}, joint.shapes.basic.PortsModelInterface, {
-        markup: '<g class="rotatable"><g class="scalable"><rect class="body"/></g><text class="label"/><g class="inPorts"/><g class="outPorts"/></g>',
+        markup: '<rect class="body scalable"/><g class="inPorts"/><g class="outPorts"/><rect class="header"/><text class="label"/>',
+        //markup: '<g class="rotatable"><g class="scalable"><rect class="body"/></g><rect class="header"/><text class="label"/><g class="ports-container"><g class="inPorts"/><g class="outPorts"/></g></g>',
         //portMarkup: '<g class="port port<%= id %>"><circle class="port-body"/><text class="port-label"/></g>',
         portMarkup: '<g class="port port<%= id %>"><rect class="port-body"/><text class="port-label"/></g>',
         defaults: joint.util.deepSupplement({
@@ -15,20 +16,40 @@ joint.shapes.devs.Model2 = joint.shapes.basic.Generic.extend(_.extend({}, joint.
                     magnet: !1
                 },
                 ".body": {
-                    width: 150,
+                    width: 180,
                     height: 250,
-                    stroke: "#000000"
+                    y: 58,
+                    fill: '#E0E0E0'
+                },
+                ".header": {
+                    width: 200,
+                    height: 35,
+                    fill: '#D0D0D0'
+                },
+                ".ports-container": {
+                    y: 50
                 },
                 ".port-body": {
                     r: 10,
                     magnet: !0,
-                    stroke: "#000000",
+                    //stroke: "#999",
                     width: 15,
                     height: 10
                 },
                 ".outPorts .port-body": {
-                    x: -15,
-                    stroke: "#FF0000"
+                    x: -11
+                },
+                ".inPorts .port-body": {
+                    x: -4
+                },
+                ".inPorts": {
+                    y: 25
+                },
+                ".outPorts": {
+                    y: 25
+                },
+                ".inPorts .port-label": {
+                    opacity: 0
                 },
                 text: {
                     "pointer-events": "none"
@@ -36,8 +57,8 @@ joint.shapes.devs.Model2 = joint.shapes.basic.Generic.extend(_.extend({}, joint.
                 ".label": {
                     text: "Model",
                     "ref-x": .5,
-                    "ref-y": 10,
-                    ref: ".body",
+                    "ref-y": 0.3,
+                    ref: ".header",
                     "text-anchor": "middle",
                     fill: "#000000"
                 },
@@ -50,7 +71,10 @@ joint.shapes.devs.Model2 = joint.shapes.basic.Generic.extend(_.extend({}, joint.
                 ".outPorts .port-label": {
                     x: 15,
                     dy: 4,
-                    fill: "#000000"
+                    fill: "#000000",
+                    ref: ".body",
+                    x: -15,
+                    "text-anchor": "end"
                 }
             }
         }, joint.shapes.basic.Generic.prototype.defaults),
