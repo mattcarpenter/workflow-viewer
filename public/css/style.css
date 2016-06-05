@@ -1,3 +1,8 @@
+body {
+	padding: 0px;
+	margin: 0px;
+}
+
 .connection-wrap {
 	stroke: #000;
 	opacity: 1;
@@ -24,6 +29,68 @@ g:hover > .connection-wrap {
 	display: none;
 }
 
+.paper-scroller {
+	padding-top: 0px !important;
+}
+
 .link-tools {
 	display: none;
+}
+
+.holy-grail {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+.holy-grail-body {
+  display: flex;
+  flex: 1;
+}
+
+.holy-grail-content {
+  flex: 1;
+}
+
+.holy-grail-nav, .holy-grail-ads {
+  /* 12em is the width of the columns */
+  flex: 0 0 18em;
+}
+
+.holy-grail-nav {
+  /* put the nav on the left */
+  order: -1;
+  background-color: #222227;
+}
+
+header {
+	font-weight: 200;
+	padding: 6px;
+	background-color: #222227;
+}
+
+header i {
+	margin-right: 5px;
+}
+
+header h5 {
+	float: left;
+}
+
+header span {
+	margin: 9px 0px 10px 35px;
+	float: left;
+	color: #B0B0B0;
+}
+.clearfix {
+	clear: both;
+}
+footer {
+	background-color: #222227;
+	padding: 6px;
+}
+
+#connected-indicator {
+	color: #78cc78;
+	margin-right: 5px;
 }

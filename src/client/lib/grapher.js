@@ -3,6 +3,7 @@
 
     var Workflow = require('./workflow');
     var ColorScheme = require('color-scheme');
+    var logger = require('./logger');
     require('./link');
     require('./model');
 
@@ -40,8 +41,8 @@
         });
 
         paperScroller.$el.css({
-            width: $(window).width(),
-            height: $(window).height()
+            width: $('main').width(),
+            height: $('main').height()
         });
 
         $('#paper').append(paperScroller.render().el);
@@ -116,8 +117,8 @@
                     //var canLog = false;
                     //if (sub.name==='social-login') {
                     //    canLog  =true;
-                    //    console.log('hoping to add ' + sub.name + '..................');
-                    //    console.log('parent:', node.name);
+                    //    logger.log('hoping to add ' + sub.name + '..................');
+                    //    logger.log('parent:', node.name);
                     //}
                     // can ANOTHER sibling reach the node I'm about to add?
                     // Bounce it out one column if another sibling can reach the node I'm about to add.
@@ -125,7 +126,7 @@
                         .filter((n) => n.name !== sub.name)
                         .every((sibling) => {
                             //if (canLog) {
-                            //    console.log('can ' + sibling.name + ' go to it?' + canReachNode(sibling, sub));
+                            //    logger.log('can ' + sibling.name + ' go to it?' + canReachNode(sibling, sub));
                             //}
                             var seenDuringReachWalk = [];
                             var canReach = canReachNode(sibling, sub, seenDuringReachWalk);
@@ -146,7 +147,7 @@
                 for (var row = 0; row < columns[col].length; row++) {
                     var rect = columns[col][row];
                     rect.attributes.position = { x: 100 + (col * 430), y: currentY };
-                    console.log('adding rect', rect);
+                    logger.log('adding rect', rect);
                     graph.addCells([rect]);
                     currentY += rect.attributes.size.height + 60;
                 }
@@ -155,13 +156,13 @@
             // create links
             Object.keys(workflowDefinition).forEach((stepName) => {
                 var current = findStepInGraph(workflowGraph.getGraph(), stepName);
-                console.log('found ' + stepName + '?', current);
+                logger.log('found ' + stepName + '?', current);
                 if (current) {
                     var currentPortNumber = 0;
                     (current.out || []).forEach((dest) => {
-                        console.log('linking ' + current.name + ' to ' + dest.name);
+                        logger.log('linking ' + current.name + ' to ' + dest.name);
                         var color = '#' + colors[Math.floor(Math.random() * colors.length)];
-                        debugger;
+
                         current.rect.attr('.outPorts>.port' + currentPortNumber +'>.port-body/fill', Color(color).lighten(0.3).hexString());
                         current.rect.attr('.outPorts>.port' + currentPortNumber + '>.port-body/stroke', Color(color).lighten(0).hexString());
                         dest.rect.attr('.inPorts>.port0>.port-body/fill', Color(color).lighten(0.3).hexString());

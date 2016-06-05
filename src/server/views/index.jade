@@ -4,11 +4,27 @@ html(lang="en")
         title Workflow Viewer
         link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/jointjs/0.9.7/joint.min.css')
         link(rel='stylesheet', href='css/rappid.css')
+        link(rel='stylesheet', href='css/bootstrap.min.css')
         link(rel='stylesheet', href='css/style.css')
-    body(style="background-color: #2A2B31;")
-        #paper
+        link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css')
+    body(style="background-color: #2A2B31;", class="holy-grail")
+        header
+            h5
+                i.fa.fa-sitemap(aria-hidden="true")
+                | Workflow Viewer
+
+            span#current-workflow
+                | social-registration
+            .clearfix
+        div.holy-grail-body
+            main.holy-grail-content
+                #paper
+        footer
+            i.fa.fa-circle(aria-hidden="true", id="connected-indicator")
+            | connected to server
         script(src='https://code.jquery.com/jquery-2.2.3.min.js')
         script(src='vendor/lodash.min.js')
         script(src='vendor/backbone.min.js')
         script(src='vendor/rappid.min.js')
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js')
         script(src='js/bundle.js')
