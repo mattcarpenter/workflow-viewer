@@ -62,13 +62,10 @@
             width: $tabs.children('div').first().width(),
             height: $tabs.children('div').first().height()
         });
-
-        // add a new tab with the paper
-        //var $tab = $('<li role="presentation"><a role="tab" data-toggle="tab" href="#wf-' + workflowId + '">test</a></li>');
-        //$tabsList.append($tab);
+        
+        // add tab and paper to DOM
         var $content = $('<div>').addClass('paper');
-        $tabsList.addBSTab('wf-' + workflowId, 'Test', $content);
-
+        $tabsList.addBSTab('wf-' + workflowId, workflowName, $content);
         $content.append(paperScroller.render().el);
 
         paper.on('blank:pointerdown', paperScroller.startPanning);
