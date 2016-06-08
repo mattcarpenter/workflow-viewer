@@ -18,13 +18,41 @@ html(lang="en")
             .clearfix
         div.holy-grail-body
             main.holy-grail-content
+                #tabs
+                    ul.nav.nav-tabs(id="tabs-list")
+                    div
+                        //li
+                        //    a(href='#test') test
+                        //li
+                        //    a(href='#test2') test2
+                    //#tabs-content.tab-content
+                        //#test.tab-pane.active
+                        //    | this is content for the test tab
+                        //#test2.tab-pane
+                        //    | this is content for the second tab
                 #paper
         footer
             i.fa.fa-circle(aria-hidden="true", id="connected-indicator")
             | connected to server
+        .modal.fade(id="step-modal")
+            .modal-dialog(role="document")
+                .modal-content
+                    .modal-header
+                        button(type="button", class="close", data-dismiss="modal")
+                            span
+                                | &times;
+                        h4(class="modal-title")
+                            | Step
+                    .modal-body
+                        p.no-state
+                            | no state information captured for this step
+                    .modal-footer
+                        button(type="button", class="btn btn-default", data-dismiss="modal")
+                            | Close
         script(src='https://code.jquery.com/jquery-2.2.3.min.js')
         script(src='vendor/lodash.min.js')
         script(src='vendor/backbone.min.js')
         script(src='vendor/rappid.min.js')
         script(src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js')
+        script(src='https://code.jquery.com/ui/1.12.0-rc.2/jquery-ui.min.js')
         script(src='js/bundle.js')

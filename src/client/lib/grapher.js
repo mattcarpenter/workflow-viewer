@@ -4,14 +4,31 @@
     var Workflow = require('./workflow');
     var ColorScheme = require('color-scheme');
     var logger = require('./logger');
+    var ee = require('event-emitter');
+    var q = require('q');
+
+    var processing = [];
+    var workflows = [];
+
     require('./link');
     require('./model');
 
-    module.exports = {
-        graphWorkflow: graphWorkflow
-    };
+    var $tabs = $('#tabs').tabs();
+    var $tabsList = $tabs.children('#tabs-list');
 
-    function graphWorkflow(workflowDefinition) {
+    var emittable = ee({
+        graphWorkflow: graphWorkflow,
+        activate: activate,
+        deactivate: deactivate
+    });
+
+    module.exports = emittable;
+
+    function graphWorkflow(workflowDefinition, workflowId, workflowName) {
+        var dfd = q.defer();
+
+        processing.push(dfd);
+
         var workflowGraph = new Workflow(workflowDefinition);
         var Color = require('color');
 
@@ -41,13 +58,24 @@
         });
 
         paperScroller.$el.css({
-            width: $('main').width(),
-            height: $('main').height()
+            width: $tabs.children('div').first().width(),
+            height: $tabs.children('div').first().height()
         });
 
-        $('#paper').append(paperScroller.render().el);
+        // add a new tab with the paper
+        $tabsList.append('<li><a href="#wf-' + workflowId + '">test</a></li>');
+        $tabs.append('<div id="wf-' + workflowId + '"><div class="paper"></div></div>');
+
+        var $paper = $tabs.find('#wf-' + workflowId + ' .paper');
+        $paper.append(paperScroller.render().el);
 
         paper.on('blank:pointerdown', paperScroller.startPanning);
+
+        paper.on('cell:pointerdown', function(cellView, evt, x, y) { 
+            if (cellView.model.attributes.node) {
+                emittable.emit('stepClicked', cellView.model.attributes.node);
+            }
+        });
 
         (function () {
             var stepsSeen = [];
@@ -56,10 +84,13 @@
             var currentColumn = 0;
             var columns = [];
 
+            // walks and adds each step in the workflow graph into an array
+            // of columns to later be rejiggered and positioned.
             walkAndAdd(workflowGraph.getGraph(), 0);
 
             function walkAndAdd(node, col) {
                 var rect = new joint.shapes.devs.Model2({ 
+                    node: node,
                     position: { x: xOffset, y: yOffset },
                     size: { width: 200, height: 50 + (node.out.length * 20) },
                     inPorts: ['in'],
@@ -141,7 +172,7 @@
 
             }
 
-            // add everything to the graph
+            // add all steps from the column arrays to the paper
             for (var col = 0; col < columns.length; col++ ){
                 var currentY = 40;
                 for (var row = 0; row < columns[col].length; row++) {
@@ -198,7 +229,54 @@
             });
             paperScroller.centerContent();
             paperScroller.zoomToFit();
+
+
+            workflows.push({
+                id: workflowId,
+                graph: workflowGraph.getGraph()
+            });
+
+            dfd.resolve();
         })();
+    }
+
+    /**
+     * Marks a step as activated
+     */
+    function activate(id, name) {
+        q.all(processing).done(function () {
+            console.log('activating ' + id + '#' + name);
+            // find step node to activate
+            var wf = findWorkflowInQueue(id);
+            var step = findStepInGraph(wf.graph, name);
+
+            step.rect.attr('.body/fill', '#bbffbb');
+        });
+    }
+
+    /**
+     * Deactivates a step
+     */
+    function deactivate(id, name) {
+        q.all(processing).done(function () {
+            console.log('deactivating ' + id + '#' + name);
+            var wf = findWorkflowInQueue(id);
+            var step = findStepInGraph(wf.graph, name);
+            step.rect.attr('.body/fill', '#E0E0E0');
+
+        });
+    }
+
+    function findWorkflowInQueue(workflowId) {
+        var wf;
+
+        workflows.some(function (w) {
+            if (w.id === workflowId) {
+                wf = w;
+            }
+        });
+
+        return wf;
     }
 
     /**

@@ -19,11 +19,15 @@
   "dependencies": {
     "color": "^0.11.1",
     "color-scheme": "0.0.5",
+    "event-emitter": "^0.3.4",
     "gulp": "^3.9.1",
     "gulp-rename": "^1.2.2",
     "hapi": "^13.4.0",
     "inert": "^4.0.0",
     "jade": "^1.11.0",
+    "q": "^1.4.1",
+    "socket.io": "^1.4.6",
+    "socket.io-client": "^1.4.6",
     "vision": "^4.1.0",
     "webpack-stream": "^3.2.0"
   },

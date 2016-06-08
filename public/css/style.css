@@ -50,6 +50,7 @@ g:hover > .connection-wrap {
 
 .holy-grail-content {
   flex: 1;
+  position: relative;
 }
 
 .holy-grail-nav, .holy-grail-ads {
@@ -62,6 +63,32 @@ g:hover > .connection-wrap {
   order: -1;
   background-color: #222227;
 }
+
+.ui-state-active {
+	color: #ffffff;
+    background-color: #3e444c;
+    border: 1px solid #1c1e22;
+    border-bottom-color: transparent;
+    cursor: default;
+}
+
+#tabs > div {
+	top: 42px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	position: absolute;
+}
+
+#tabs {
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	position: absolute;
+}
+
+
 
 header {
 	font-weight: 200;
@@ -82,9 +109,11 @@ header span {
 	float: left;
 	color: #B0B0B0;
 }
+
 .clearfix {
 	clear: both;
 }
+
 footer {
 	background-color: #222227;
 	padding: 6px;

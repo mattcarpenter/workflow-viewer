@@ -1,5 +1,5 @@
 joint.shapes.devs.Model2 = joint.shapes.basic.Generic.extend(_.extend({}, joint.shapes.basic.PortsModelInterface, {
-        markup: '<rect class="body scalable"/><g class="inPorts"/><g class="outPorts"/><rect class="header"/><text class="label"/>',
+        markup: '<g class="container"><rect class="body scalable"/><g class="inPorts"/><g class="outPorts"/><rect class="header"/><text class="label"/></g>',
         //markup: '<g class="rotatable"><g class="scalable"><rect class="body"/></g><rect class="header"/><text class="label"/><g class="ports-container"><g class="inPorts"/><g class="outPorts"/></g></g>',
         //portMarkup: '<g class="port port<%= id %>"><circle class="port-body"/><text class="port-label"/></g>',
         portMarkup: '<g class="port port<%= id %>"><rect class="port-body"/><text class="port-label"/></g>',
@@ -18,7 +18,7 @@ joint.shapes.devs.Model2 = joint.shapes.basic.Generic.extend(_.extend({}, joint.
                 ".body": {
                     width: 180,
                     height: 250,
-                    y: 58,
+                    y: 45,
                     fill: '#E0E0E0'
                 },
                 ".header": {
