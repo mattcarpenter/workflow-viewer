@@ -13,7 +13,8 @@
     require('./link');
     require('./model');
 
-    var $tabs = $('#tabs').tabs();
+    var $tabs = $('#tabs');//.tabs();
+    var $tabContent = $tabs.children('.tab-content').first();
     var $tabsList = $tabs.children('#tabs-list');
 
     var emittable = ee({
@@ -63,11 +64,12 @@
         });
 
         // add a new tab with the paper
-        $tabsList.append('<li><a href="#wf-' + workflowId + '">test</a></li>');
-        $tabs.append('<div id="wf-' + workflowId + '"><div class="paper"></div></div>');
+        //var $tab = $('<li role="presentation"><a role="tab" data-toggle="tab" href="#wf-' + workflowId + '">test</a></li>');
+        //$tabsList.append($tab);
+        var $content = $('<div>').addClass('paper');
+        $tabsList.addBSTab('wf-' + workflowId, 'Test', $content);
 
-        var $paper = $tabs.find('#wf-' + workflowId + ' .paper');
-        $paper.append(paperScroller.render().el);
+        $content.append(paperScroller.render().el);
 
         paper.on('blank:pointerdown', paperScroller.startPanning);
 
