@@ -72,7 +72,9 @@
 
         paper.on('cell:pointerdown', function(cellView, evt, x, y) { 
             if (cellView.model.attributes.node) {
-                emittable.emit('stepClicked', cellView.model.attributes.node);
+                var wf = findWorkflowInQueue(cellView.model.attributes.workflowId);
+                var step = findStepInGraph(wf.graph, cellView.model.attributes.node.name);
+                emittable.emit('stepClicked', step);
             }
         });
 
@@ -82,6 +84,7 @@
             var yOffset = 0;
             var currentColumn = 0;
             var columns = [];
+            var links = [];
 
             // walks and adds each step in the workflow graph into an array
             // of columns to later be rejiggered and positioned.
@@ -90,6 +93,7 @@
             function walkAndAdd(node, col) {
                 var rect = new joint.shapes.devs.Model2({ 
                     node: node,
+                    workflowId: workflowId,
                     position: { x: xOffset, y: yOffset },
                     size: { width: 200, height: 50 + (node.out.length * 20) },
                     inPorts: ['in'],
@@ -221,6 +225,11 @@
                             }
 
                         });
+                        links.push({
+                            from: current.name,
+                            to: dest.name,
+                            link: cell
+                        });
                         graph.addCell(cell);
                         currentPortNumber++;
                     });
@@ -232,7 +241,9 @@
 
             workflows.push({
                 id: workflowId,
-                graph: workflowGraph.getGraph()
+                graph: workflowGraph.getGraph(),
+                links: links,
+                lastStepName: null
             });
 
             dfd.resolve();
@@ -242,25 +253,45 @@
     /**
      * Marks a step as activated
      */
-    function activate(id, name) {
+    function activate(id, name, data) {
         q.all(processing).done(function () {
             console.log('activating ' + id + '#' + name);
             // find step node to activate
             var wf = findWorkflowInQueue(id);
             var step = findStepInGraph(wf.graph, name);
 
+            step.inData = data;
+
+            // highlight step
             step.rect.attr('.body/fill', '#bbffbb');
+
+            // figure out what the last step was so we can highlight the link
+            if (!wf.lastStepName) {
+                // this is the first step
+                wf.lastStepName = name;
+                return;
+            }
+
+            var link = findLink(wf.links, wf.lastStepName, name);
+            wf.lastStepName = name;
+            if (link) {
+                link.link.attr('.connection/stroke', '#78cc78');
+                link.link.attr('.connection/stroke-dasharray', '4');
+                link.link.attr('.connection/animation', 'dash 1s linear');
+            }   
+
         });
     }
 
     /**
      * Deactivates a step
      */
-    function deactivate(id, name) {
+    function deactivate(id, name, data) {
         q.all(processing).done(function () {
             console.log('deactivating ' + id + '#' + name);
             var wf = findWorkflowInQueue(id);
             var step = findStepInGraph(wf.graph, name);
+            step.outData = data;
             step.rect.attr('.body/fill', '#E0E0E0');
 
         });
@@ -276,6 +307,18 @@
         });
 
         return wf;
+    }
+
+    function findLink(links, from, to) {
+        var l;
+
+        links.forEach(function (link) {
+            if (link.from === from && link.to === to) {
+                l = link;
+            }
+        });
+
+        return l;
     }
 
     /**

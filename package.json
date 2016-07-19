@@ -19,6 +19,8 @@
   "dependencies": {
     "color": "^0.11.1",
     "color-scheme": "0.0.5",
+    "esprima": "^2.7.2",
+    "esprima-ast-utils": "0.0.6",
     "event-emitter": "^0.3.4",
     "gulp": "^3.9.1",
     "gulp-rename": "^1.2.2",
