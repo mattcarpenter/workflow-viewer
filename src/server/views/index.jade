@@ -7,20 +7,24 @@ html(lang="en")
         link(rel='stylesheet', href='css/bootstrap.min.css')
         link(rel='stylesheet', href='css/style.css')
         link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css')
+        link(href='http://fonts.googleapis.com/css?family=Lato:400,300&subset=latin,latin-ext' rel='stylesheet' type='text/css')
     body(style="background-color: #2A2B31;", class="holy-grail")
         header
-            h5
-                i.fa.fa-sitemap(aria-hidden="true")
+            h1
                 | Workflow Viewer
-
-            span#current-workflow
-                | social-registration
             .clearfix
         div.holy-grail-body
             main.holy-grail-content
-                #tabs
-                    ul.nav.nav-tabs(id="tabs-list")
-                    .tab-content
+                ol(class="crumbs")
+                    li
+                        a(href="#")
+                            | Hello
+                    li
+                        a(href="#")
+                            | test
+                    li
+                        a.active(href="#")
+                            | test
                 #paper
         footer
             i.fa.fa-circle(aria-hidden="true", id="connected-indicator")

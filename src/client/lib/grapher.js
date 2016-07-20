@@ -13,9 +13,9 @@
     require('./link');
     require('./model');
 
-    var $tabs = $('#tabs');//.tabs();
-    var $tabContent = $tabs.children('.tab-content').first();
-    var $tabsList = $tabs.children('#tabs-list');
+    //var $tabs = $('#tabs');//.tabs();
+    //var $tabContent = $tabs.children('.tab-content').first();
+    //var $tabsList = $tabs.children('#tabs-list');
 
     var emittable = ee({
         graphWorkflow: graphWorkflow,
@@ -58,15 +58,35 @@
             autoResizePaper: true
         });
 
+        //paperScroller.$el.css({
+        //    width: $tabs.children('div').first().width(),
+        //    height: $tabs.children('div').first().height()
+        //});
+
         paperScroller.$el.css({
-            width: $tabs.children('div').first().width(),
-            height: $tabs.children('div').first().height()
+            width: $('#paper').width(),
+            height: $('#paper').height()
         });
         
         // add tab and paper to DOM
-        var $content = $('<div>').addClass('paper');
-        $tabsList.addBSTab('wf-' + workflowId, workflowName, $content);
-        $content.append(paperScroller.render().el);
+        //var $content = $('<div>').addClass('paper');
+        //$tabsList.addBSTab('wf-' + workflowId, workflowName, $content);
+        //$content.append(paperScroller.render().el);
+        $('#paper div').removeClass('active');
+
+        $('#paper').append(paperScroller.render().el);
+        $('#paper div:last-child').addClass('active');
+        $('#paper div:last-child').on('mousewheel', function (event) {
+            var wheelDelta = event.originalEvent.wheelDelta;
+            console.log(wheelDelta / 1200);
+            if (wheelDelta < 0) {
+                // up
+                paperScroller.zoom(-1 * wheelDelta/1200, { max: 4 });
+            } else {
+                // down
+                paperScroller.zoom(-1 * wheelDelta/1200, { min: 0.2 });
+            }
+        });
 
         paper.on('blank:pointerdown', paperScroller.startPanning);
 
@@ -104,12 +124,12 @@
                             //'ref-x': .4,
                             'font-family': 'arial, helvetica, sans-serif',
                             'font-size': 12,
-                            'fill': '#555'
+                            'fill': '#CCC' // 555
                         },
                         '.body': {
                             rect: {
-                                fill: '#EAEAEA',
-                                stroke: '#222'
+                                fill: '#EAEAEA', // eaeaea
+                                stroke: '#222' // 222
                             }
                         },
                         '.inPorts circle': { fill: 'rgb(230,178,126)', 'stroke-width': 0 },
@@ -117,13 +137,13 @@
                         '.inPorts .port-label': {
                             'font-family': 'arial, helvetica, sans-serif',
                             'font-size': 10,
-                            fill: '#555',
+                            fill: '#dadada', // 555
                             opacity: 0
                         },
                         '.outPorts .port-label': {
                             'font-family': 'arial, helvetica, sans-serif',
                             'font-size': 10,
-                            fill: '#555'
+                            fill: '#dadada' // 555
                         }
                     }
                 });
@@ -263,7 +283,8 @@
             step.inData = data;
 
             // highlight step
-            step.rect.attr('.body/fill', '#bbffbb');
+            step.rect.attr('.body/fill', '#bbbbbf');
+            step.rect.attr('.port-label/fill', '#000');
 
             // figure out what the last step was so we can highlight the link
             if (!wf.lastStepName) {
@@ -278,6 +299,7 @@
                 link.link.attr('.connection/stroke', '#78cc78');
                 link.link.attr('.connection/stroke-dasharray', '4');
                 link.link.attr('.connection/animation', 'dash 1s linear');
+                link.link.toFront();
             }   
 
         });
@@ -292,7 +314,8 @@
             var wf = findWorkflowInQueue(id);
             var step = findStepInGraph(wf.graph, name);
             step.outData = data;
-            step.rect.attr('.body/fill', '#E0E0E0');
+            step.rect.attr('.body/fill', '#55555b');
+            step.rect.attr('.port-label/fill', '#dadada');
 
         });
     }

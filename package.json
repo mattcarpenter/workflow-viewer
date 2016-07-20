@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/mattcarpenter/workflow-viewer#readme",
   "dependencies": {
+    "clone": "^1.0.2",
     "color": "^0.11.1",
     "color-scheme": "0.0.5",
     "esprima": "^2.7.2",

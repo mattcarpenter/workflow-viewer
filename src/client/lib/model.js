@@ -19,12 +19,12 @@ joint.shapes.devs.Model2 = joint.shapes.basic.Generic.extend(_.extend({}, joint.
                     width: 180,
                     height: 250,
                     y: 45,
-                    fill: '#E0E0E0'
+                    fill: '#55555b' // e0e0e0
                 },
                 ".header": {
                     width: 200,
                     height: 35,
-                    fill: '#D0D0D0'
+                    fill: '#77777c' // d0d0d0
                 },
                 ".ports-container": {
                     y: 50
@@ -60,18 +60,18 @@ joint.shapes.devs.Model2 = joint.shapes.basic.Generic.extend(_.extend({}, joint.
                     "ref-y": 0.3,
                     ref: ".header",
                     "text-anchor": "middle",
-                    fill: "#000000"
+                    fill: "#ccc" //000
                 },
                 ".inPorts .port-label": {
                     x: -15,
                     dy: 4,
                     "text-anchor": "end",
-                    fill: "#000000"
+                    fill: "#dadada" //000
                 },
                 ".outPorts .port-label": {
                     x: 15,
                     dy: 4,
-                    fill: "#000000",
+                    fill: "#dadada", //000
                     ref: ".body",
                     x: -15,
                     "text-anchor": "end"
