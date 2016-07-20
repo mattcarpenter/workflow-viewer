@@ -4,12 +4,13 @@ var utils = require('esprima-ast-utils');
 module.exports = {
     parseReturnValues: parseReturnValues
 };
+var src2;
 
 function parseReturnValues(src) {
 
     var values = [];
     var syntax = esprima.parse(src);
-    
+    src2=src;
     utils.traverse(syntax, function (node, parent) {
         if (node.type === 'ReturnStatement') {
             values = values.concat(evaluate(syntax, node.argument));
@@ -55,6 +56,9 @@ function evaluate(rootNode, node) {
     // assigned the value from a member expression. We need to identify what possible values
     // we could obtain from that object regardless of what key was used to access them.
     if (node.type === 'MemberExpression') {
+        if (!node.object.properties) {
+            console.log('---',src2,'---');
+        }
         node.object.properties.forEach(function (property) {
             if (property.value.type === 'Literal') {
                 values.push(property.value.value);

@@ -4,7 +4,7 @@ body {
 }
 
 header {
-	background-color: #3d374c;
+	background-color: #2a2b31;
 	padding: 10px;
 }
 
@@ -158,11 +158,11 @@ g:hover > .connection-wrap {
 }
 
 .crumbs > li a.active:after {
-	border-left: 19px solid #5e5475;
+	border-left: 19px solid #55555b;
 }
 
 .crumbs > li a.active {
-	background-color: #5e5475;
+	background-color: #55555b;
 }
 
 .crumbs > li a:before {
