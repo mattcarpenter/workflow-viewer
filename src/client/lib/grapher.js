@@ -68,14 +68,23 @@
             height: $('#paper').height()
         });
         
-        // add tab and paper to DOM
-        //var $content = $('<div>').addClass('paper');
-        //$tabsList.addBSTab('wf-' + workflowId, workflowName, $content);
-        //$content.append(paperScroller.render().el);
-        $('#paper div').removeClass('active');
+        // add tabs
+        var $crumbs = $('ol.crumbs');
+        $crumbs.find('a').removeClass('active');
+        $crumbs.append($('<li>').append($('<a>').attr('href', '#').text(workflowName).addClass('active').data('workflow-id', workflowId)));
+        $crumbs.find('li:last-child a').on('click', function () {
+            var wid = $(this).data('workflow-id');
+            $crumbs.find('a').removeClass('active');
+            $(this).addClass('active');
+            $('#paper div').removeClass('active');
+            $('.wf-' + wid).addClass('active');
+        });
 
+        // add paper
+        $('#paper div').removeClass('active');
         $('#paper').append(paperScroller.render().el);
         $('#paper div:last-child').addClass('active');
+        $('#paper div:last-child').addClass('wf-' + workflowId);
         $('#paper div:last-child').on('mousewheel', function (event) {
             var wheelDelta = event.originalEvent.wheelDelta;
             console.log(wheelDelta / 1200);
